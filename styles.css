@@ -1,0 +1,764 @@
+/* 
+ * AutoSummarize - Retro-Modern Microsoft Word UI Styles
+ */
+
+:root {
+  --win-bg: #ece9d8;
+  --win-face: #f0f0f0;
+  --win-dark: #7a7a7a;
+  --win-darker: #333333;
+  --win-light: #ffffff;
+  --win-blue: #0055ea;
+  --win-blue-dark: #002e82;
+  --win-border: #808080;
+  --highlight-yellow: #fff375;
+  --highlight-border: #e0ca14;
+  --text-main: #1f2328;
+  --font-serif: "Times New Roman", Times, Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", Consolas, Monaco, "Courier New", monospace;
+  --card-bg: #ffffff;
+  --border-color: #d0d7de;
+  --accent-blue: #185abd;
+  --accent-light: #e8f0fe;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #f3f4f6;
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  background: linear-gradient(180deg, #185abd 0%, #103f84 100%);
+  color: white;
+  padding: 12px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.word-icon {
+  width: 36px;
+  height: 36px;
+  background: white;
+  color: #185abd;
+  font-family: var(--font-serif);
+  font-weight: 900;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.title-wrap h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.title-wrap p {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.theme-btn, .patent-badge {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.theme-btn:hover, .patent-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Main Layout */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  flex: 1;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar Controls (Word AutoSummarize Dialog) */
+.dialog-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.dialog-header {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-header h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1e293b;
+}
+
+.dialog-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Summary Modes Grid (4 iconic Word modes) */
+.modes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mode-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 8px;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.mode-option input {
+  position: absolute;
+  opacity: 0;
+}
+
+.mode-option:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.mode-option.active {
+  border-color: var(--accent-blue);
+  background: var(--accent-light);
+}
+
+.mode-icon {
+  width: 44px;
+  height: 48px;
+  border: 1px solid #94a3b8;
+  background: white;
+  margin-bottom: 6px;
+  position: relative;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-radius: 2px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.doc-line {
+  height: 3px;
+  background: #cbd5e1;
+  border-radius: 1px;
+}
+
+/* Mode 1: Highlight Key Points */
+.mode-highlight .doc-line.hl {
+  background: #facc15;
+  box-shadow: 0 0 2px #ca8a04;
+}
+
+/* Mode 2: Executive Summary at Top */
+.mode-executive .top-summary {
+  background: #bfdbfe;
+  border-bottom: 1px dashed #3b82f6;
+  padding-bottom: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mode-executive .top-summary .doc-line {
+  background: #2563eb;
+}
+
+/* Mode 3: Create New Document */
+.mode-newdoc .doc-line {
+  background: #2563eb;
+}
+
+/* Mode 4: Hide Everything Except Summary */
+.mode-hide .doc-line.hidden {
+  opacity: 0.15;
+}
+.mode-hide .doc-line.hl {
+  background: #2563eb;
+}
+
+.mode-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Summary Length Controls */
+.length-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.preset-select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: white;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.slider-val {
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 0.95rem;
+}
+
+.range-slider {
+  width: 100%;
+  accent-color: var(--accent-blue);
+  cursor: pointer;
+}
+
+/* Document Statistics */
+.stats-table {
+  width: 100%;
+  font-size: 0.8rem;
+  border-collapse: collapse;
+}
+
+.stats-table tr {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.stats-table td {
+  padding: 6px 4px;
+}
+
+.stats-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/* Sample Document Picker */
+.sample-picker-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sample-select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: white;
+  cursor: pointer;
+}
+
+/* Right Content Area: Document & Inspector */
+.workspace-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+}
+
+/* Word-style Ribbon Toolbar */
+.doc-toolbar {
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border-color);
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-btn:hover {
+  color: #1e293b;
+  background: #e2e8f0;
+}
+
+.tab-btn.active {
+  color: var(--accent-blue);
+  background: white;
+  border-color: #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.doc-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s;
+}
+
+.action-btn:hover {
+  background: #f1f5f9;
+}
+
+/* Document Canvas (styled like MS Word page) */
+.doc-canvas-wrap {
+  padding: 30px;
+  background: #e2e8f0;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.word-page {
+  background: white;
+  max-width: 820px;
+  width: 100%;
+  min-height: 800px;
+  padding: 50px 60px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  border-radius: 2px;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #1a1a1a;
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .doc-canvas-wrap {
+    padding: 12px;
+  }
+  .word-page {
+    padding: 24px;
+  }
+}
+
+/* Executive Summary Box at top */
+.executive-summary-banner {
+  background: #f8fafc;
+  border: 1px solid #93c5fd;
+  border-left: 5px solid #2563eb;
+  padding: 16px 20px;
+  margin-bottom: 30px;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.exec-header {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e40af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Sentence Highlighting Styles */
+.sentence {
+  transition: background-color 0.2s, opacity 0.2s;
+  padding: 1px 0;
+  border-radius: 2px;
+}
+
+.sentence.highlighted {
+  background-color: var(--highlight-yellow);
+  box-shadow: 0 0 0 2px var(--highlight-yellow);
+}
+
+.sentence.hidden-mode {
+  opacity: 0.18;
+  filter: blur(0.3px);
+  user-select: none;
+}
+
+.sentence.hidden-mode:hover {
+  opacity: 0.5;
+}
+
+/* Editable Text View */
+.edit-textarea {
+  width: 100%;
+  height: 500px;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 16px;
+  resize: vertical;
+  outline: none;
+}
+
+.edit-textarea:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(24, 90, 189, 0.15);
+}
+
+/* Inspector View */
+.inspector-panel {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.inspector-info-box {
+  background: #f0f7ff;
+  border: 1px solid #bae0fd;
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-size: 0.88rem;
+}
+
+.inspector-info-box h3 {
+  font-size: 0.95rem;
+  color: #0369a1;
+  margin-bottom: 6px;
+}
+
+.keywords-section h4, .scores-section h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.keyword-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.keyword-chip {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.keyword-count {
+  background: #2563eb;
+  color: white;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* Scoring Table */
+.table-responsive {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.score-table th {
+  background: #f8fafc;
+  padding: 10px 12px;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.score-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: top;
+}
+
+.score-table tr:hover {
+  background: #f8fafc;
+}
+
+.score-table tr.selected-row {
+  background: #fefce8;
+}
+
+.badge-included {
+  background: #16a34a;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge-omitted {
+  background: #94a3b8;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.num-cell {
+  font-family: var(--font-mono);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.score-badge {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Floating AutoSummarize Mini-Toolbar (Nostalgic Word 97 floating toolbar) */
+.floating-word-toolbar {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #ece9d8;
+  border: 2px outset #ffffff;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.3);
+  border-radius: 3px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  font-size: 0.82rem;
+  font-family: var(--font-sans);
+}
+
+.floating-title {
+  font-weight: 700;
+  color: #1e3a8a;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.floating-slider {
+  width: 110px;
+}
+
+.close-floating {
+  cursor: pointer;
+  background: #d4d0c8;
+  border: 1px solid #808080;
+  padding: 1px 6px;
+  font-weight: bold;
+}
+
+/* Word 97 Classic Theme */
+body.theme-word97 {
+  background-color: #008080; /* Classic Teal desktop */
+  font-family: "Tahoma", "MS Sans Serif", var(--font-sans);
+}
+
+body.theme-word97 header {
+  background: #000080; /* Classic Navy titlebar */
+  border-bottom: 2px solid #ffffff;
+}
+
+body.theme-word97 .word-icon {
+  background: #000080;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+body.theme-word97 .dialog-card,
+body.theme-word97 .workspace-card {
+  background: #ece9d8;
+  border: 2px outset #ffffff;
+  border-radius: 0;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.theme-word97 .dialog-header,
+body.theme-word97 .doc-toolbar {
+  background: #000080;
+  color: white;
+  border-radius: 0;
+}
+
+body.theme-word97 .dialog-header h2,
+body.theme-word97 .tab-btn.active {
+  color: white;
+}
+
+body.theme-word97 .mode-option {
+  border: 2px outset #ffffff;
+  background: #ece9d8;
+  border-radius: 0;
+}
+
+body.theme-word97 .mode-option.active {
+  border: 2px inset #ffffff;
+  background: #d4d0c8;
+}
+
+body.theme-word97 .tab-btn {
+  border-radius: 0;
+  border: 2px outset #ffffff;
+  background: #ece9d8;
+  color: black;
+}
+
+body.theme-word97 .tab-btn.active {
+  border: 2px inset #ffffff;
+  background: #d4d0c8;
+  color: black;
+}

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Word AutoSummarize (1997–2007 Classic Engine)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Application Header -->
+  <header>
+    <div class="brand">
+      <div class="word-icon">W</div>
+      <div class="title-wrap">
+        <h1>AutoSummarize</h1>
+        <p>Classic Extractive NLP Engine (Microsoft Word 97–2007 &bull; U.S. Patent 5,924,108)</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="https://patents.google.com/patent/US5924108A/en" target="_blank" rel="noopener noreferrer" class="patent-badge">
+        📜 U.S. Pat. 5,924,108
+      </a>
+      <button id="themeToggleBtn" class="theme-btn" title="Toggle between Classic Word 97 and Modern Interface">
+        🕹️ Classic Theme
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Left Column: Classic AutoSummarize Dialog Box -->
+    <aside class="dialog-card">
+      <div class="dialog-header">
+        <h2>
+          <span>AutoSummarize</span>
+        </h2>
+      </div>
+
+      <div class="dialog-body">
+
+        <!-- Sample Document Picker -->
+        <div class="sample-picker-wrap">
+          <label for="sampleDocSelect" class="section-label">Select Sample Document</label>
+          <select id="sampleDocSelect" class="sample-select">
+            <option value="office97">Microsoft Office 97 Press Release (1996)</option>
+            <option value="nlpEvolution">The Evolution of Text Summarization</option>
+            <option value="stevejobs">Steve Jobs - Stanford Speech (2005)</option>
+            <option value="gettysburg">Abraham Lincoln - Gettysburg Address (1863)</option>
+            <option value="custom">[ Custom User Document ]</option>
+          </select>
+        </div>
+
+        <!-- 4 Classic Summary Display Modes -->
+        <div>
+          <span class="section-label">Type of Summary</span>
+          <div class="modes-grid">
+
+            <!-- Mode 1: Highlight Key Points -->
+            <label class="mode-option active" data-mode="highlight">
+              <input type="radio" name="summaryMode" value="highlight" checked>
+              <div class="mode-icon mode-highlight">
+                <div class="doc-line hl"></div>
+                <div class="doc-line"></div>
+                <div class="doc-line hl"></div>
+                <div class="doc-line"></div>
+                <div class="doc-line hl"></div>
+              </div>
+              <span class="mode-title">Highlight key points</span>
+            </label>
+
+            <!-- Mode 2: Executive Summary at Top -->
+            <label class="mode-option" data-mode="executive">
+              <input type="radio" name="summaryMode" value="executive">
+              <div class="mode-icon mode-executive">
+                <div class="top-summary">
+                  <div class="doc-line"></div>
+                  <div class="doc-line"></div>
+                </div>
+                <div class="doc-line" style="margin-top:3px;"></div>
+                <div class="doc-line"></div>
+              </div>
+              <span class="mode-title">Executive summary at top</span>
+            </label>
+
+            <!-- Mode 3: Create New Document -->
+            <label class="mode-option" data-mode="newdoc">
+              <input type="radio" name="summaryMode" value="newdoc">
+              <div class="mode-icon mode-newdoc">
+                <div class="doc-line"></div>
+                <div class="doc-line"></div>
+                <div class="doc-line"></div>
+              </div>
+              <span class="mode-title">Summary only (New doc)</span>
+            </label>
+
+            <!-- Mode 4: Hide Everything Except Summary -->
+            <label class="mode-option" data-mode="hide">
+              <input type="radio" name="summaryMode" value="hide">
+              <div class="mode-icon mode-hide">
+                <div class="doc-line hl"></div>
+                <div class="doc-line hidden"></div>
+                <div class="doc-line hl"></div>
+                <div class="doc-line hidden"></div>
+              </div>
+              <span class="mode-title">Hide non-summary text</span>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Length of Summary Controls -->
+        <div class="length-controls">
+          <label for="lengthPresetSelect" class="section-label" style="margin-bottom: 4px;">Length of Summary</label>
+          <select id="lengthPresetSelect" class="preset-select">
+            <option value="pct_25" selected>25% of original (Word Default)</option>
+            <option value="pct_10">10% of original</option>
+            <option value="pct_50">50% of original</option>
+            <option value="pct_75">75% of original</option>
+            <option value="sen_10">10 sentences</option>
+            <option value="sen_20">20 sentences</option>
+            <option value="wrd_100">100 words or less</option>
+            <option value="wrd_500">500 words or less</option>
+            <option value="custom_slider">Custom percentage slider</option>
+          </select>
+
+          <!-- Interactive Percentage Slider -->
+          <div class="slider-wrap">
+            <div class="slider-header">
+              <span>Percent of original:</span>
+              <span id="sliderValueText" class="slider-val">25%</span>
+            </div>
+            <input type="range" id="summaryPercentSlider" class="range-slider" min="1" max="100" value="25">
+          </div>
+        </div>
+
+        <!-- Summary Statistics Table -->
+        <div>
+          <span class="section-label">Document Statistics</span>
+          <table class="stats-table">
+            <tbody>
+              <tr>
+                <td>Original words:</td>
+                <td id="statOriginalWords">0</td>
+              </tr>
+              <tr>
+                <td>Summary words:</td>
+                <td id="statSummaryWords">0</td>
+              </tr>
+              <tr>
+                <td>Original sentences:</td>
+                <td id="statOriginalSentences">0</td>
+              </tr>
+              <tr>
+                <td>Summary sentences:</td>
+                <td id="statSummarySentences">0</td>
+              </tr>
+              <tr>
+                <td>Percent of original:</td>
+                <td id="statPercentRatio">0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Extracted Metadata Keywords (U.S. Patent 5,924,108 feature) -->
+        <div>
+          <span class="section-label">Document Keywords (Properties)</span>
+          <div id="sidebarKeywords" class="keyword-chips">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- Right Column: Document Canvas & Inspector -->
+    <section class="workspace-card">
+
+      <!-- View Toolbar / Tabs -->
+      <div class="doc-toolbar">
+        <div class="tabs">
+          <button id="tabDocView" class="tab-btn active" data-tab="doc">
+            📄 Document View
+          </button>
+          <button id="tabEdit" class="tab-btn" data-tab="edit">
+            ✏️ Edit Text
+          </button>
+          <button id="tabInspector" class="tab-btn" data-tab="inspector">
+            🔍 Algorithm Inspector
+          </button>
+          <button id="tabGuide" class="tab-btn" data-tab="guide">
+            📚 How It Works
+          </button>
+        </div>
+
+        <div class="doc-actions">
+          <button id="copySummaryBtn" class="action-btn" title="Copy extracted summary to clipboard">
+            📋 Copy Summary
+          </button>
+          <button id="resetDocBtn" class="action-btn" title="Reset current document">
+            ↺ Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 1: Document View Canvas -->
+      <div id="panelDocView" class="doc-canvas-wrap tab-panel">
+        <article class="word-page" id="wordDocumentCanvas">
+          <!-- Executive summary injected here if mode == executive -->
+          <div id="executiveSummaryContainer"></div>
+          <!-- Document paragraphs & sentences injected here -->
+          <div id="documentTextContainer"></div>
+        </article>
+      </div>
+
+      <!-- Tab 2: Edit Custom Text -->
+      <div id="panelEdit" class="tab-panel" style="display: none; padding: 24px;">
+        <label for="customDocInput" class="section-label">Type or paste any text below to summarize:</label>
+        <textarea id="customDocInput" class="edit-textarea" placeholder="Paste your text here..."></textarea>
+        <div style="margin-top: 12px; display: flex; gap: 8px;">
+          <button id="applyCustomTextBtn" class="action-btn" style="background: #185abd; color: white; border-color: #103f84;">
+            ✓ Apply Text & Summarize
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 3: Algorithm Inspector -->
+      <div id="panelInspector" class="tab-panel inspector-panel" style="display: none;">
+        <div class="inspector-info-box">
+          <h3>🔬 Patent 5,924,108 Scoring Breakdown</h3>
+          <p>
+            Microsoft Word evaluates each sentence by computing a composite score based on:
+            <strong>(1) Average content word frequency</strong>,
+            <strong>(2) Paragraph/document location bonuses</strong>,
+            <strong>(3) Heading/title overlap</strong>, and
+            <strong>(4) Cue phrase &amp; anaphora adjustments</strong>.
+            Highlighted rows below indicate sentences selected for the current summary.
+          </p>
+        </div>
+
+        <div class="keywords-section">
+          <h4>📊 Top Document Content Words (Luhn Frequency Counts)</h4>
+          <div id="inspectorKeywordsList" class="keyword-chips"></div>
+        </div>
+
+        <div class="scores-section">
+          <h4>📑 Sentence Evaluation Matrix</h4>
+          <div class="table-responsive">
+            <table class="score-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Status</th>
+                  <th>Sentence Text</th>
+                  <th>Content Words</th>
+                  <th class="num-cell" title="Average frequency of content words (sum of freq / count)">Word Freq</th>
+                  <th class="num-cell" title="Bonus for first sentence of doc or paragraph">Pos Bonus</th>
+                  <th class="num-cell" title="Bonus for words matching heading or title">Title Bonus</th>
+                  <th class="num-cell" title="Bonus for summary cue words; penalty for orphan pronouns/stigma words">Cue Mod</th>
+                  <th class="num-cell" title="Final composite sentence score">Total Score</th>
+                </tr>
+              </thead>
+              <tbody id="sentenceScoresTableBody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Educational Guide: How It Works -->
+      <div id="panelGuide" class="tab-panel inspector-panel" style="display: none; line-height: 1.7;">
+        <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+          
+          <div class="inspector-info-box">
+            <h2 style="font-size: 1.25rem; margin-bottom: 8px; color: #185abd;">The Architecture of Pre-LLM Summarization</h2>
+            <p>
+              Long before transformer neural networks like GPT, Gemini, or Claude, Microsoft Word shipped with <strong>AutoSummarize</strong>,
+              introduced in Word 97 and maintained through Word 2007. It is one of the most famous early examples of commercial <strong>Extractive Summarization</strong>.
+            </p>
+          </div>
+
+          <section>
+            <h3 style="font-size: 1.1rem; color: #1e293b; margin-bottom: 8px;">1. Extractive vs. Abstractive Summarization</h3>
+            <p>
+              Modern LLMs perform <em>abstractive</em> summarization: they "read" the text, synthesize high-level meaning, and write brand-new sentences from scratch.
+            </p>
+            <p style="margin-top: 8px;">
+              By contrast, early models performed <em>extractive</em> summarization: they acted like an automated yellow highlighter pen.
+              They selected the most statistically significant sentences already written by the author, excised them from the text,
+              and re-assembled them in original order.
+            </p>
+          </section>
+
+          <section>
+            <h3 style="font-size: 1.1rem; color: #1e293b; margin-bottom: 8px;">2. The Two Foundational NLP Papers</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px;">
+              <div style="background: #f8fafc; padding: 14px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <h4 style="color: #0f172a; margin-bottom: 6px;">H.P. Luhn (1958, IBM)</h4>
+                <p style="font-size: 0.88rem; color: #475569;">
+                  <strong>Keyword Frequency Hypothesis:</strong> The central theme of a document is reflected by words that occur frequently.
+                  By stripping common grammatical "null" words (stop words) and measuring the density of remaining content words,
+                  one can mathematically score the information density of each sentence.
+                </p>
+              </div>
+              <div style="background: #f8fafc; padding: 14px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <h4 style="color: #0f172a; margin-bottom: 6px;">H.P. Edmundson (1969)</h4>
+                <p style="font-size: 0.88rem; color: #475569;">
+                  <strong>Structural &amp; Cue Heuristics:</strong> Luhn's model missed structure. Edmundson introduced three new features:
+                  <strong>Location</strong> (first/last sentences in paragraphs are topic sentences),
+                  <strong>Title/Headings</strong> (words in headings carry higher intent), and
+                  <strong>Cue Words</strong> (pragmatic markers like <em>"in conclusion"</em> boost scores, while <em>"for example"</em> reduces them).
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h3 style="font-size: 1.1rem; color: #1e293b; margin-bottom: 8px;">3. Microsoft's Proprietary Implementation (U.S. Patent 5,924,108)</h3>
+            <p>
+              Patented by Ronald A. Fein, William B. Dolan, and Microsoft Research in 1999, the Word AutoSummarize engine executed these precise stages:
+            </p>
+            <ol style="margin-left: 20px; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 0.92rem;">
+              <li><strong>Tokenization &amp; Stop-Word Removal:</strong> Parses words and sentences while filtering non-content function words (<em>the, is, at, which</em>).</li>
+              <li><strong>Phrase Compression:</strong> Identifies recurrent multi-word collocations (e.g., <em>"operating system"</em>) so composite phrases aren't overcounted as isolated words.</li>
+              <li><strong>Document Frequency Table:</strong> Tallies how often every content root appears across the entire document.</li>
+              <li><strong>Sentence Scoring Equation:</strong> Sums the frequency counts of all content words in the sentence and divides by the total content words, normalizing for length:
+                <br>
+                <code style="display:inline-block; margin-top:4px; padding: 4px 8px; background: #e2e8f0; border-radius: 4px; font-family: var(--font-mono);">
+                  Score = ( &Sigma; freq(w) / N_content ) + PositionBonus + TitleBonus + CueBonus - AnaphoraPenalty
+                </code>
+              </li>
+              <li><strong>Anaphora &amp; Cue Conditioning:</strong> Penalizes or conditions sentences that start with orphan pronouns (e.g. <em>"He said this..."</em> or <em>"This happened..."</em>) because they make poor standalone summary sentences.</li>
+              <li><strong>Chronological Re-Ordering:</strong> Sorts top-ranking sentences back into their original document order so the summary reads cohesively.</li>
+            </ol>
+          </section>
+
+          <section>
+            <h3 style="font-size: 1.1rem; color: #1e293b; margin-bottom: 8px;">4. Why Did Microsoft Remove It in Word 2010?</h3>
+            <p>
+              While innovative for the 1990s, AutoSummarize suffered from the inherent brittleness of purely statistical extraction:
+            </p>
+            <ul style="margin-left: 20px; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 0.92rem;">
+              <li><strong>No Semantic Understanding:</strong> It had no concept of synonymy (e.g. treating "car" and "automobile" as completely different entities).</li>
+              <li><strong>Choppy Narrative Flow:</strong> Extracted sentences often lacked natural transitions when read back-to-back.</li>
+              <li><strong>Vulnerability to Repetition:</strong> Repetitive or buzzword-heavy documents could trick the frequency counters into prioritizing filler sentences.</li>
+            </ul>
+            <p style="margin-top: 10px;">
+              Starting in Word 2010, Microsoft deprecated the feature, eventually replacing it years later with modern cloud-based AI tools like Microsoft 365 Copilot.
+            </p>
+          </section>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Nostalgic Floating Word 97 AutoSummarize Toolbar -->
+  <div class="floating-word-toolbar" id="floatingWordToolbar">
+    <span class="floating-title">
+      🔍 AutoSummarize:
+    </span>
+    <input type="range" id="floatingSlider" class="floating-slider" min="1" max="100" value="25" title="Adjust summary percentage">
+    <span id="floatingSliderText" style="font-weight: bold; width: 36px;">25%</span>
+    <button id="closeFloatingBtn" class="close-floating" title="Minimize toolbar">&times;</button>
+  </div>
+
+  <script src="summarizer.js"></script>
+  <script src="sample-docs.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
